@@ -1,8 +1,10 @@
-// This script is used to deploy the contracts to the blockchain.
-const Token = artifacts.require("Token");
+const Collector = artifacts.require("Collector");
 
-module.exports = async function (deployer) {
-  await deployer.deploy(Token, "My Token","MYT");
-  const token = await Token.deployed();
-  console.log("Token deployed at @: " + token.address);
+module.exports = async (deployer, network, accounts) => {
+  await deployer.deploy(
+    Collector,
+    "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"
+  );
+  const collector = await Collector.deployed();
+  console.log("Collector deployed at: ", collector.address);
 };

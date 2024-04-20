@@ -29,7 +29,7 @@ contract Collector is Ownable {
     ethUsdOracle = AggregatorV3Interface(oracleEthUsdPrice);
   }
 
-  function getLastPrice() public view returns (int) {
+  function getLatestPrice() public view returns (int) {
     (, int price, , , ) = ethUsdOracle.latestRoundData();
     return price;
   }
@@ -53,7 +53,7 @@ contract Collector is Ownable {
     uint userUSDDeposit = 0;
     if (userEthDeposit[user] > 0) {
       uint ethPriceDecimals = getPriceDecimals();
-      uint ethPrice = uint(getLastPrice());
+      uint ethPrice = uint(getLatestPrice());
       uint divDecs = 18 + ethPriceDecimals - usdDecimals;
       userUSDDeposit = (userEthDeposit[user] * ethPrice) / (10 ** divDecs);
     }
@@ -64,7 +64,7 @@ contract Collector is Ownable {
     uint convertAmountInEth = 0;
     if (usdAmount > 0) {
       uint ethPriceDecimals = getPriceDecimals();
-      uint ethPrice = uint(getLastPrice());
+      uint ethPrice = uint(getLatestPrice());
       uint mulDecs = 18 + ethPriceDecimals - usdDecimals;
       convertAmountInEth = (usdAmount * (10 ** mulDecs)) / ethPrice;
     }
@@ -82,5 +82,9 @@ contract Collector is Ownable {
     if (!sent) {
       revert noEthSent();
     }
+  }
+
+  function getNativeCoinsBalance() external view returns (uint256) {
+    return address(this).balance;
   }
 }
